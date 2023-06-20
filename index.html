@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>FRC Wordle 2023</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <script src="script.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="input-container">
+      <input type="text" id="teamInput" placeholder="FRC Team 🤓">
+      <button onclick="guessAttempted()">Guess</button>
+    </div>
+    <div class="table-container">
+      <table id="dataTable">
+        <thead>
+          <tr>
+            <th>Team Number</th>
+            <th>Division</th>
+            <th>Location</th>
+            <th>EPA Rank</th>
+            <th>Rookie Year</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+<script>
+const input = document.getElementById("teamInput");
+input.addEventListener("keydown", function(event) {
+  if (event.keyCode === 13) {
+    guessAttempted();
+  }
+});
+</script>
+</html>
