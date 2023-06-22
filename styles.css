@@ -98,3 +98,49 @@ table tr:hover {
 .popup-content button {
   margin-top: 2rem;
 }
+
+@media (max-width: 1000px) {
+  .container {
+    padding: 10px;
+  }
+
+  .table-container {
+    width: 85%;
+  }
+
+  input[type="text"] {
+    width: 250px;
+    height: 40px;
+    font-size: 25px;
+    padding: 10px;
+  }
+
+  button {
+    width: 120px;
+    height: 60px;
+    font-size: 25px;
+    padding: 10px;
+  }
+
+  table th, table td {
+    height: 50px;
+    font-size: 25px;
+  }
+
+  .popup-container {
+    width: 80%;
+    padding: 1rem;
+  }
+
+  .popup-content button {
+    width: 40%;
+    height: 20%;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 28px;
+  }
+
+  .popup-message{
+    font-size: 28px;
+  }
+}
