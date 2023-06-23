@@ -3745,6 +3745,12 @@ function chooseTeam() {
     return keys[randomIndex];
 }
 
+var correctTeam = chooseTeam()
+var rookie_year_correct = frc_teams[correctTeam].rookie_year
+var location_correct = frc_teams[correctTeam].location;
+var epa_correct = frc_teams[correctTeam].epa_rank;
+var division_correct = frc_teams[correctTeam].division;
+
 function addTableRow(teamData, cellColors) {
     const table = document.getElementById('dataTable');
     const tbody = table.querySelector('tbody');
@@ -3764,23 +3770,72 @@ function compareIntegers(correct_team, guessed_team) {
     return correct_team<guessed_team ? -1 : correct_team>guessed_team ? 1 : 0;
 }
 
-function showPopup() {
+function createPopupContainer() {
     const popupContainer = document.createElement('div');
     popupContainer.classList.add('popup-container');
+    return popupContainer;
+}
+  
+function createPopupContent() {
     const popupContent = document.createElement('div');
     popupContent.classList.add('popup-content');
+    return popupContent;
+}
+  
+function createPopupMessage(text) {
     const message = document.createElement('span');
     message.classList.add('popup-message');
-    message.textContent = 'Congratulations! You guessed the team in ' + attempts + (attempts > 1 ? ' tries' : ' try');
-    const closeButton = document.createElement('button');
-    closeButton.textContent = 'Close';
-    closeButton.addEventListener('click', closePopup);
-    const playAgainButton = document.createElement('button');
-    playAgainButton.textContent = 'Play Again';
-    playAgainButton.addEventListener('click', reloadPage);
+    message.textContent = text;
+    return message;
+}
+  
+function createButton(text, onClick) {
+    const button = document.createElement('button');
+    button.textContent = text;
+    button.addEventListener('click', onClick);
+    return button;
+}
+  
+function closePopup() {
+    const popupContainer = document.querySelector('.popup-container');
+    if (popupContainer) {
+        popupContainer.remove();
+    }
+}
+  
+function showPopup(wordleCompleted) {
+    const popupContainer = createPopupContainer();
+    const popupContent = createPopupContent();
+    let messageText;
+    if (wordleCompleted) {
+      messageText = 'Congratulations! You guessed the team in ' + attempts + (attempts > 1 ? ' tries' : ' try');
+    } else {
+      messageText = 'The correct answer was ' + correctTeam;
+    }
+    const message = createPopupMessage(messageText);
+    const closeButton = createButton('Close', closePopup);
+    const playAgainButton = createButton('Play Again', reloadPage);
     popupContent.appendChild(message);
     popupContent.appendChild(closeButton);
     popupContent.appendChild(playAgainButton);
+    popupContainer.appendChild(popupContent);
+    const guessButton = document.getElementById('teamInput');
+    guessButton.disabled = true;
+    document.body.appendChild(popupContainer);
+}
+  
+function confirmRevealingAnswer() {
+    const popupContainer = createPopupContainer();
+    const popupContent = createPopupContent();
+    const message = createPopupMessage('Are you sure you want to see the answer?');
+    const noButton = createButton('No', closePopup);
+    const yesButton = createButton('Yes', function() {
+        closePopup();
+        showPopup(false);
+    });
+    popupContent.appendChild(message);
+    popupContent.appendChild(noButton);
+    popupContent.appendChild(yesButton);
     popupContainer.appendChild(popupContent);
     document.body.appendChild(popupContainer);
 }
@@ -3795,12 +3850,6 @@ function closePopup() {
 function reloadPage() {
     location.reload();
 }
-  
-var correctTeam = chooseTeam()
-var rookie_year_correct = frc_teams[correctTeam].rookie_year
-var location_correct = frc_teams[correctTeam].location;
-var epa_correct = frc_teams[correctTeam].epa_rank;
-var division_correct = frc_teams[correctTeam].division;
 
 function guessAttempted(){
     var guess = document.getElementById('teamInput').value;
@@ -3836,6 +3885,6 @@ function guessAttempted(){
     )
     document.getElementById('teamInput').value = "";
     if(division_matches && location_matches && younger_team==0 && epa_rank_higher==0){
-        showPopup();
+        showPopup(true);
     }
 }
